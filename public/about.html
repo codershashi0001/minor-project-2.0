@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About • CHRONOMUSIOUN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-left"><div class="logo">CHRONOMUSIOUN</div></div>
+        <div class="nav-right">
+            <nav aria-label="Primary">
+                <a href="/index.html">Home</a>
+                <a href="/favourite.html">Favourite</a>
+                <a aria-current="page" href="/about.html">About</a>
+                <a href="/gallery.html">Gallery</a>
+                <a href="/download.html">Download</a>
+            </nav>
+            <div id="authArea">
+                <a class="btn" href="/login.html">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="about" style="padding: 44px 20px;">
+            <h1>About Chronomusion</h1>
+            <h3 style="margin:8px 0;color:var(--text)">The Global Gateway to Museums.</h3>
+            <p style="max-width: 78ch; color: var(--muted)">Chronomusion is a next-generation digital museum gallery experience designed to bring the world’s cultural treasures together in one unified platform. Instead of switching between multiple museum websites, Chronomusion gives users a single global gateway to explore museums, artifacts, exhibitions and historical collections from different countries instantly.</p>
+            <p style="max-width: 78ch; color: var(--muted)">Our mission is to make world history, art, culture and heritage accessible to everyone, anywhere in the world — in an immersive, intuitive and interactive way. Chronomusion curates data from museums across continents and presents them in a modern, user‑friendly interface, making it easier for students, researchers, travelers, art enthusiasts and history lovers to discover collections that were previously scattered across the internet.</p>
+            <p style="max-width: 78ch; color: var(--muted)">Whether it’s ancient civilizations, modern art galleries, rare artifacts, space museums, national archives or cultural heritage centres — Chronomusion connects it all in one universe.</p>
+            <blockquote style="margin:16px 0; color:var(--text); font-weight:600">We are not just showcasing museums… We are creating a global time journey of human civilization.</blockquote>
+
+            <!-- Interactive stats -->
+            <div class="stats">
+                <div class="stat">
+                    <div class="num" data-target="50">0</div>
+                    <div class="label">Partner Museums</div>
+                </div>
+                <div class="stat">
+                    <div class="num" data-target="1500">0</div>
+                    <div class="label">Curated Artifacts</div>
+                </div>
+                <div class="stat">
+                    <div class="num" data-target="72">0</div>
+                    <div class="label">Countries Connected</div>
+                </div>
+                <div class="stat">
+                    <div class="num" data-target="100">0</div>
+                    <div class="label">Stories Published</div>
+                </div>
+            </div>
+
+            <!-- Feature cards -->
+            <div class="features">
+                <div class="feature">
+                    <h4>Unified Discovery</h4>
+                    <p>Search across institutions at once and follow thematic trails through time.</p>
+                </div>
+                <div class="feature">
+                    <h4>Personal Favourites</h4>
+                    <p>Save artifacts, sync across devices, and build your own collections.</p>
+                </div>
+                <div class="feature">
+                    <h4>Download & Share</h4>
+                    <p>Download artifact imagery for study and share links with classmates.</p>
+                </div>
+            </div>
+
+            <!-- FAQ / Accordions -->
+            <div class="faq">
+                <details>
+                    <summary>How does Chronomusion collect data?</summary>
+                    <p>We use open museum APIs and institutional partnerships to aggregate metadata and imagery with correct attributions.</p>
+                </details>
+                <details>
+                    <summary>Is Chronomusion free to use?</summary>
+                    <p>Yes. Some high‑resolution downloads may be subject to the source museum’s licensing terms.</p>
+                </details>
+                <details>
+                    <summary>Can I contribute or request a museum?</summary>
+                    <p>Absolutely. Send us a note via the contact page and we’ll reach out to the institution.</p>
+                </details>
+            </div>
+        </section>
+    </main>
+
+    <a href="#top" class="back-to-top">Back To Top ^</a>
+    <footer class="footer footer-grid">
+        <div class="footer-brand">
+            <div class="brand-row"><span class="brand-icon">🏛️</span><span class="brand-name">CHRONOMUSIOUN</span></div>
+            <p>An online museum integrating collections nationally and internationally.</p>
+            <p class="small">Features: Gallery | Favourites | Search | Download</p>
+        </div>
+        <div class="footer-col">
+            <h4>QUICK LINKS</h4>
+            <a href="/index.html">HOME</a>
+            <a href="/gallery.html">GALLERY</a>
+        </div>
+        <div class="footer-col">
+            <h4>HELP</h4>
+            <a href="/contact.html">SUPPORT TEAM</a>
+            <a href="/contact.html">CONTACT US</a>
+        </div>
+        <div class="footer-col">
+            <h4>ABOUT</h4>
+            <a href="/privacy.html">PRIVACY & POLICY</a>
+            <a href="/terms.html">TERMS & CONDITION</a>
+        </div>
+        <div class="footer-col">
+            <h4>MAIL US:</h4>
+            <a href="mailto:supportteamchrono@hotmail.com">supportteamchrono@hotmail.com</a>
+            <a href="mailto:supportteammuseioun@live.in">supportteammuseioun@live.in</a>
+        </div>
+        <div class="footer-col">
+            <h4>OFFICE ADDRESS</h4>
+            <div class="address">📍 Greater noida, knowledge park III,<br>gautam budh nagar,<br>pin code 201008</div>
+        </div>
+        <div class="footer-sep"></div>
+        <div class="footer-copy">© <span id="year"></span> CHRONOMUSIOUN | All rights reserved</div>
+    </footer>
+
+    <script>
+document.getElementById('year').textContent = new Date().getFullYear();
+async function renderAuth(){
+  const area = document.getElementById('authArea');
+  try{
+    const me = await fetch('/api/me', { credentials:'include' }).then(r=>r.json());
+    if(me && me.user){
+      const name = me.user.username || me.user.name || 'User';
+      const initial = (name||'U').slice(0,1).toUpperCase();
+      area.innerHTML = `<div class="profile"><button class="profile-btn"><span class="avatar">${initial}</span></button><div class="profile-menu"><a href="/settings.html">Update Profile</a><a href="/download.html">My Downloads</a><button id="logoutBtn" class="menu-btn">Logout</button></div></div>`;
+      const btn=area.querySelector('.profile-btn'); const menu=area.querySelector('.profile-menu');
+      btn.addEventListener('click',()=>{const o=menu.getAttribute('data-open')==='1';menu.setAttribute('data-open',o?'0':'1');});
+      document.addEventListener('click',(e)=>{if(!area.contains(e.target)) menu.setAttribute('data-open','0');});
+      area.querySelector('#logoutBtn').addEventListener('click', async ()=>{ await fetch('/api/logout',{method:'POST',credentials:'include'}); location.reload(); });
+    }
+  }catch{}
+}
+renderAuth();
+// Stats counter animation
+const nums = Array.from(document.querySelectorAll('.num'));
+if (nums.length) {
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const el=e.target; const target=Number(el.getAttribute('data-target'))||0; let cur=0; const step=Math.max(1, Math.ceil(target/60));
+        const t=setInterval(()=>{ cur+=step; if(cur>=target){ cur=target; clearInterval(t);} el.textContent=cur; }, 16);
+        io.unobserve(el);
+      }
+    });
+  },{threshold:.3});
+  nums.forEach(n=>io.observe(n));
+}
+    </script>
+    <style>
+        :root { --bg:#0a0c12; --bg-soft:#121623; --text:#f1f3f8; --muted:#a9afc3; --primary:#6b8cff; --accent:#2ee6a6; --card:#161b2a; --border:#242b3f; --space-3:16px; --space-4:20px; --radius:12px; }
+        *{box-sizing:border-box} body{margin:0;font-family:'Inter',system-ui;background:linear-gradient(180deg,var(--bg) 0%,#0f1320 100%);color:var(--text)}
+        .navbar{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:var(--space-3) var(--space-4);background:rgba(10,12,18,0.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+        .nav-left{display:flex;align-items:center;gap:var(--space-3)} .logo{font-weight:800}
+        .nav-right{display:flex;align-items:center;gap:var(--space-3)} .navbar nav{display:flex;gap:var(--space-3)} .navbar nav a{color:var(--muted);text-decoration:none}
+        .navbar nav a[aria-current="page"], .navbar nav a:hover{color:var(--text)}
+        .btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 14px;border-radius:var(--radius);text-decoration:none}
+        .btn-accent{background:var(--accent);border-color:var(--accent);color:#081611}
+        .footer{border-top:1px solid var(--border);padding:var(--space-4);color:var(--muted);background:rgba(10,12,18,0.6)}
+        .back-to-top{display:block;text-align:center;padding:10px;background:#bfb7b3;color:#111;font-weight:600;text-decoration:none}
+        .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1.2fr 1.6fr;gap:20px}
+        .brand-row{display:flex;gap:10px;align-items:center}.brand-name{font-weight:800}
+        .footer h4{margin:0 0 10px 0;color:var(--text);font-size:14px}
+        .footer a{color:var(--muted);text-decoration:none;display:block;margin:4px 0}
+        .footer a:hover{color:var(--text)} .small{font-size:12px}
+        .footer-sep{grid-column:1/-1;height:1px;background:var(--border)}
+        .footer-copy{grid-column:1/-1}
+        .profile { position: relative; }
+        .profile-btn { background: var(--card); border:1px solid var(--border); color:var(--text); padding:6px 8px; border-radius: 999px; cursor:pointer; }
+        .avatar { display:inline-flex; width:28px; height:28px; align-items:center; justify-content:center; background: var(--primary); color:#fff; border-radius:50%; font-weight:700 }
+        .profile-menu { position:absolute; right:0; top:calc(100% + 6px); background: var(--bg-soft); border:1px solid var(--border); border-radius:10px; padding:8px; display:none; min-width:160px; z-index:60 }
+        .profile-menu[data-open="1"]{ display:block }
+        .profile-menu a, .profile-menu .menu-btn { display:block; width:100%; text-align:left; background:transparent; border:0; color:var(--text); text-decoration:none; padding:8px 10px; border-radius:8px; cursor:pointer }
+        .profile-menu a:hover, .profile-menu .menu-btn:hover { background: var(--card); }
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0}
+        .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+        .stat .num{font-size:28px;font-weight:800;color:#fff}
+        .stat .label{color:var(--muted);font-size:13px}
+        .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:10px 0 6px}
+        .feature{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+        .feature:hover{transform:translateY(-2px);transition:transform .15s ease}
+        .faq details{background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;margin:8px 0;padding:10px}
+        .faq summary{cursor:pointer;color:var(--text);font-weight:600}
+        @media(max-width:900px){ .stats{grid-template-columns:repeat(2,1fr)} .features{grid-template-columns:1fr} }
+    </style>
+</body>
+</html>
+
+

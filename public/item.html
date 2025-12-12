@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item • CHRONOMUSIOUN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-left"><div class="logo">CHRONOMUSIOUN</div></div>
+        <div class="nav-right">
+            <nav aria-label="Primary">
+                <a href="/index.html">Home</a>
+                <a href="/favourite.html">Favourite</a>
+                <a href="/about.html">About</a>
+                <a href="/gallery.html">Gallery</a>
+                <a href="/download.html">Download</a>
+            </nav>
+            <div id="authArea"><a class="btn" href="/login.html">Login</a></div>
+        </div>
+    </header>
+
+    <main class="detail">
+        <div class="detail-left">
+            <h1 id="title">Loading...</h1>
+            <div class="meta" id="year"></div>
+            <p id="desc" class="desc"></p>
+            <div class="actions">
+                <button id="favBtn" class="btn">♡ Favourite</button>
+                <a id="dlBtn" class="btn" href="#" download>⬇ Download</a>
+            </div>
+        </div>
+        <div class="detail-right">
+            <img id="img" alt=""/>
+        </div>
+    </main>
+
+    <a href="#top" class="back-to-top">Back To Top ^</a>
+    <footer class="footer"><div>© CHRONOMUSIOUN</div></footer>
+
+    <script>
+function qs(k){ const u=new URL(location.href); return u.searchParams.get(k); }
+async function api(path, options={}){ const token=localStorage.getItem('auth_token'); const headers={'Content-Type':'application/json'}; if(token) headers['Authorization']=`Bearer ${token}`; const r=await fetch(path,{credentials:'include', headers, ...options}); if(!r.ok) throw new Error(); return r.json(); }
+const favKey='cm_favorites'; let favs=new Set(JSON.parse(localStorage.getItem(favKey)||'[]'));
+function saveFavs(){ localStorage.setItem(favKey, JSON.stringify(Array.from(favs))); }
+
+async function render(){
+  const id = qs('id'); if(!id) { document.getElementById('title').textContent='Not found'; return; }
+  try{
+    const item = await api(`/api/items/${encodeURIComponent(id)}`);
+    document.getElementById('title').textContent = item.title || 'Untitled';
+    document.getElementById('year').textContent = item.year || '';
+    document.getElementById('desc').textContent = item.description || '';
+    const img=document.getElementById('img'); img.src=item.imageUrl; img.alt=item.title;
+    const favBtn=document.getElementById('favBtn'); const isFav=favs.has(Number(item.id)); favBtn.textContent = (isFav?'❤':'♡') + ' Favourite';
+    favBtn.onclick = ()=>{ const now=favs.has(Number(item.id)); if(now) favs.delete(Number(item.id)); else favs.add(Number(item.id)); saveFavs(); favBtn.textContent=(now?'♡':'❤')+' Favourite'; };
+    const dl=document.getElementById('dlBtn'); dl.href=`/download/${item.id}`; dl.setAttribute('data-title', encodeURIComponent(item.title||'')); dl.setAttribute('data-year', encodeURIComponent(item.year||'')); dl.setAttribute('data-image', encodeURIComponent(item.imageUrl||''));
+    dl.addEventListener('click', async (e)=>{ try{ await api('/api/downloads',{ method:'POST', body: JSON.stringify({ id:item.id, title:item.title, year:item.year, imageUrl:item.imageUrl }) }); }catch{} });
+  }catch{ document.getElementById('title').textContent='Not found'; }
+}
+render();
+
+// Auth state
+async function renderAuth(){
+  const area = document.getElementById('authArea');
+  try{ const me = await fetch('/api/me',{credentials:'include'}).then(r=>r.json()); if(me && me.user){ const name=me.user.username||me.user.name||'User'; const initial=(name||'U').slice(0,1).toUpperCase(); area.innerHTML=`<div class="profile"><button class="profile-btn"><span class="avatar">${initial}</span></button><div class="profile-menu"><a href="/settings.html">Update Profile</a><a href="/download.html">My Downloads</a><button id="logoutBtn" class="menu-btn">Logout</button></div></div>`; const btn=area.querySelector('.profile-btn'); const menu=area.querySelector('.profile-menu'); btn.addEventListener('click',()=>{const o=menu.getAttribute('data-open')==='1';menu.setAttribute('data-open',o?'0':'1');}); document.addEventListener('click',(e)=>{if(!area.contains(e.target)) menu.setAttribute('data-open','0');}); area.querySelector('#logoutBtn').addEventListener('click', async ()=>{ await fetch('/api/logout',{method:'POST',credentials:'include'}); location.reload(); }); } }catch{} }
+renderAuth();
+    </script>
+
+    <style>
+        :root { --bg:#0a0c12; --bg-soft:#121623; --text:#f1f3f8; --muted:#a9afc3; --primary:#6b8cff; --accent:#2ee6a6; --card:#161b2a; --border:#242b3f; --space-3:16px; --space-4:20px; --radius:12px; }
+        *{box-sizing:border-box} body{margin:0;font-family:'Inter',system-ui;background:linear-gradient(180deg,var(--bg) 0%,#0f1320 100%);color:var(--text)}
+        .navbar{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:var(--space-3) var(--space-4);background:rgba(10,12,18,0.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+        .nav-left{display:flex;align-items:center;gap:var(--space-3)} .logo{font-weight:800}
+        .nav-right{display:flex;align-items:center;gap:var(--space-3)} .navbar nav{display:flex;gap:var(--space-3)} .navbar nav a{color:var(--muted);text-decoration:none}
+        .navbar nav a:hover{color:var(--text)} .btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 14px;border-radius:var(--radius);text-decoration:none;cursor:pointer}
+        .detail{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;padding:24px}
+        .detail-right img{width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+        .meta{color:var(--muted);margin-bottom:8px}
+        .desc{color:var(--muted)}
+        .footer{border-top:1px solid var(--border);padding:20px;color:var(--muted);background:rgba(10,12,18,0.6)}
+        .back-to-top{display:block;text-align:center;padding:10px;background:#bfb7b3;color:#111;font-weight:600;text-decoration:none}
+        .profile { position: relative; }
+        .profile-btn { background: var(--card); border:1px solid var(--border); color:var(--text); padding:6px 8px; border-radius: 999px; cursor:pointer; }
+        .avatar { display:inline-flex; width:28px; height:28px; align-items:center; justify-content:center; background: var(--primary); color:#fff; border-radius:50%; font-weight:700 }
+        .profile-menu { position:absolute; right:0; top:calc(100% + 6px); background: var(--bg-soft); border:1px solid var(--border); border-radius:10px; padding:8px; display:none; min-width:160px; z-index:60 }
+        .profile-menu[data-open="1"]{ display:block }
+        .profile-menu a, .profile-menu .menu-btn { display:block; width:100%; text-align:left; background:transparent; border:0; color:var(--text); text-decoration:none; padding:8px 10px; border-radius:8px; cursor:pointer }
+        .profile-menu a:hover, .profile-menu .menu-btn:hover { background: var(--card); }
+        @media(max-width:900px){ .detail{ grid-template-columns: 1fr; } }
+    </style>
+</body>
+</html>
+
+
